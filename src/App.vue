@@ -1,24 +1,17 @@
 <template>
+  <NavBar />
   <router-view />
+
 </template>
 
 <script setup>
-
+import { useUserStore } from './stores/userStore';
+import NavBar from './components/NavBar.vue';
+const userStore = useUserStore();
+const user = userStore.user;
+const logout = userStore.logout;
 </script>
 
 <style>
-/* Estilos personalizados para KanbanBoard */
-.kanban-board {
-  @apply min-h-screen bg-gray-100 p-8;
-}
 
-/* Estilos personalizados para KanbanList */
-.kanban-list {
-  @apply bg-white rounded-lg shadow p-4 w-72 min-w-[300px] h-fit;
-}
-
-/* Estilos personalizados para KanbanCard */
-.kanban-card {
-  @apply bg-gray-50 p-3 rounded shadow-sm hover:shadow transition cursor-pointer;
-}
 </style>
