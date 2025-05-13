@@ -16,9 +16,8 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-// Configura Firestore con long polling
 const db = initializeFirestore(app, {
-  experimentalForceLongPolling: true, // ✅ Opción correcta
+  experimentalForceLongPolling: true,
 });
 
 const auth = getAuth(app);

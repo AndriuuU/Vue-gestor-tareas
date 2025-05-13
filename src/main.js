@@ -13,3 +13,6 @@ app.use(router);
 app.use(pinia); 
 
 app.mount('#app');
+
+const themeStore = useThemeStore();
+themeStore.initTheme();
