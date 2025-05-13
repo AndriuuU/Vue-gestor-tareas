@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth"; // Añade esta línea
+import { initializeFirestore } from "firebase/firestore"; // Cambia esta línea
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -10,12 +10,17 @@ const firebaseConfig = {
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  databaseURL: "https://gestor-tarea.firebaseio.com" 
+
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app, {
-  experimentalForceLongPolling: true 
+
+// Configura Firestore con long polling
+const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true, // ✅ Opción correcta
 });
+
 const auth = getAuth(app);
 
 export { db, auth };

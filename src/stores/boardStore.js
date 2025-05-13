@@ -1,26 +1,35 @@
 import { defineStore } from 'pinia';
-import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../services/firebase';
+import { doc, onSnapshot, updateDoc, setDoc } from 'firebase/firestore';
 
 export const useBoardStore = defineStore('board', {
   state: () => ({
-    currentBoard: {
-      lists: []
-    }
+    currentBoard: null,
   }),
   actions: {
-    async fetchBoard() {
-      const unsub = onSnapshot(collection(db, 'lists'), (querySnapshot) => {
-        this.currentBoard.lists = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          cards: doc.data().cards || []
-        }));
+    // Escuchar cambios en el tablero
+    subscribeToBoard(boardId) {
+      const boardRef = doc(db, 'boards', boardId);
+      
+      return onSnapshot(boardRef, (doc) => {
+        this.currentBoard = { id: doc.id, ...doc.data() };
       });
-      return unsub;
     },
-    async addList(title) {
-      // Implementar conexión a Firestore
+
+    // Añadir nueva lista
+  
+    async addList(boardId, listTitle) {
+      const boardRef = doc(db, 'boards', boardId);
+      const lists = Array.isArray(this.currentBoard?.lists) ? this.currentBoard.lists : [];
+
+      await setDoc(boardRef, {
+        lists: [...lists, { 
+          id: Date.now().toString(),
+          title: listTitle,
+          cards: [] 
+        }]
+      }, { merge: true }); // ¡Aquí está la clave!
     }
-  }
-});
+
+    
+  }});

@@ -1,13 +1,17 @@
+// ✅ Correcto (src/stores/userStore.js)
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
 import { auth } from '../services/firebase';
+import { ref } from 'vue';
 
 export const useUserStore = defineStore('user', () => {
   const user = ref(null);
   
-  const init = () => {
-    auth.onAuthStateChanged(_user => {
-      user.value = _user;
+  const init = async () => {
+    return new Promise((resolve) => {
+      auth.onAuthStateChanged(_user => {
+        user.value = _user;
+        resolve(_user);
+      });
     });
   };
 
